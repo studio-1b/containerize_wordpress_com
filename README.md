@@ -37,17 +37,17 @@ The scripts reads this file, to get your export.  It needs to "login" first.
 
 4. Optional step: You can skip this step.  Or you can just download the exports first, or download the manually.  
 * A. To download both exports manually, read https://wordpress.com/support/export/ and read https://wordpress.com/support/export-your-media-library/.  You need to read both, to download both.  When they are downloaded, you need to extract the .xml file from the zip, and rename them mysite.wordpress.com.xml and rename the .tar media export to mysite.wordpress.com.tar
-* B. OR You can use the "dl_wpcom_export.sh" script, which automates a HTML-scrape, to download both files to your host.  The HTML scrap may change at anytime, so it might stop working, if they change anything.  If you want to try, execute this command:
+* B. OR You can use the "dl_wpcom_export.sh" script, which automates a HTML-scrape, to download both files to your host.  The HTML scrape may change at anytime, so it might stop working, if they change anything.  If you want to try, execute this command:
 ```
-./dl_wpcom_export.sh [https://<yoursite>.wordpress.com] [username]
+./dl_wpcom_export.sh [https://&lt;yoursite>.wordpress.com] [username]
 ```
-And it will create several .tmp files, then download the .zip file which contains the WXL file.  It will extract and rename the WXL .xml file.  It will then download the media TAR file, which being a few gigabytes, will take a while.  And you should see 2 new files: "<yoursite>.wordpress.com.xml" and "<yoursite>.wordpress.com.tar"
+And it will create several .tmp files, then download the .zip file which contains the WXL file.  It will extract and rename the WXL .xml file.  It will then download the media TAR file, which being a few gigabytes, will take a while.  And you should see 2 new files: "&lt;yoursite>.wordpress.com.xml" and "&lt;yoursite>.wordpress.com.tar"
 
 5. If you ran the export above, in step 4.  Manually or via the "dl_wpcom_export.sh" script, you can just create the new Wordpress Docker containers, using the command below, with only URL, NO USERNAME:
 ```
 containerize_wordpress_com.sh [wordpress.com url]
 ```
-If the script sees 1 argument, it will assume that argument looks like "https://<mysite>.wordpress.com" AND you have 2 files named: "<mysite>.wordpress.com.xml" and "<mysite>.wordpress.com.tar".  And it will skip downloading the exports from internet, and create the containers using those exports.
+If the script sees 1 argument, it will assume that argument looks like "https://&lt;mysite>.wordpress.com" AND you have 2 files named: "&lt;mysite>.wordpress.com.xml" and "&lt;mysite>.wordpress.com.tar".  And it will skip downloading the exports from internet, and create the containers using those exports.
 
 OR to BOTH DOWNLOAD NEW EXPORTS FROM Wordpress.com, and also create a container that imports the data, run:
 ```
