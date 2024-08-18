@@ -36,8 +36,8 @@ echo "[password]" > "[username]"
 The scripts reads this file, to get your export.  It needs to "login" first.
 
 4. Optional step: You can skip this step.  Or you can just download the exports first, or download the manually.  
-A. To download both exports manually, read https://wordpress.com/support/export/ and read https://wordpress.com/support/export-your-media-library/.  You need to read both, to download both.  When they are downloaded, you need to extract the .xml file from the zip, and rename them mysite.wordpress.com.xml and rename the .tar media export to mysite.wordpress.com.tar
-B. You can use the "dl_wpcom_export.sh" script, which automates a HTML-scrape, to download both files to your host.  The HTML scrap may change at anytime, so it might stop working, if they change anything.  If you want to try, execute this command:
+* A. To download both exports manually, read https://wordpress.com/support/export/ and read https://wordpress.com/support/export-your-media-library/.  You need to read both, to download both.  When they are downloaded, you need to extract the .xml file from the zip, and rename them mysite.wordpress.com.xml and rename the .tar media export to mysite.wordpress.com.tar
+* B. OR You can use the "dl_wpcom_export.sh" script, which automates a HTML-scrape, to download both files to your host.  The HTML scrap may change at anytime, so it might stop working, if they change anything.  If you want to try, execute this command:
 ```
 ./dl_wpcom_export.sh [https://<yoursite>.wordpress.com] [username]
 ```
