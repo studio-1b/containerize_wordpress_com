@@ -15,7 +15,8 @@ sudo apt install docker docker-compose
 > I am not affiliated with Automatic nor Wordpress.com.  Use any of these scripts at your own risk!
 
 > [!WARNING]
-> This is for copying YOUR site from the managed site "Wordpress.com".  "Wordpress.com" is a free service where you get to create your own free Wordpress website.  It is NOT "Wordpress software for Linux".  Please see [https://github.com/studio-1b/call_wordpress_web_export](https://github.com/studio-1b/call_wordpress_web_export) for bash script that automates downloading of WXL export using HTML scraping for Wordpress software for Linux.  If you don't know the difference, please stop.
+> This is for copying YOUR site from the managed site "Wordpress.com".  "Wordpress.com" is a free service where you get to create your own free Wordpress website.  It is NOT "Wordpress software for Linux".  If you don't know the difference, please stop.
+> If you need similar functionality for automating downloading WXL export file for "Wordpress software for Linux", please see [https://github.com/studio-1b/call_wordpress_web_export](https://github.com/studio-1b/call_wordpress_web_export) for bash script that automates downloading of WXL export using HTML scraping for Wordpress software for Linux.  
 
 1. Install the software above, on the host computer, you wish to have a copy of your wordpress.com site.
 
