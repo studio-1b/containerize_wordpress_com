@@ -45,9 +45,9 @@ And it will create several .tmp files, then download the .zip file which contain
 
 5. If you ran the export above, in step 4.  Manually or via the "dl_wpcom_export.sh" script, you can just create the new Wordpress Docker containers, using the command below, with only URL, NO USERNAME:
 ```
-containerize_wordpress_com.sh [wordpress.com url]
+containerize_wordpress_com.sh [wordpress.com url, without https://]
 ```
-If the script sees 1 argument, it will assume that argument looks like "https://&lt;mysite>.wordpress.com" AND you have 2 files named: "&lt;mysite>.wordpress.com.xml" and "&lt;mysite>.wordpress.com.tar".  And it will skip downloading the exports from internet, and create the containers using those exports.
+If the script sees 1 argument, it will assume that argument looks like "&lt;mysite>.wordpress.com" AND you have 2 files named: "&lt;mysite>.wordpress.com.xml" and "&lt;mysite>.wordpress.com.tar".  And it will skip downloading the exports from internet, and create the containers using those exports.
 
 OR to BOTH DOWNLOAD NEW EXPORTS FROM Wordpress.com, and also create a container that imports the data, run:
 ```

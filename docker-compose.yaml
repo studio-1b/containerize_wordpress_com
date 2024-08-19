@@ -36,8 +36,8 @@ services:
 
 networks:
   bridge:
-    name: nginxbridge
-    external: true
+#    name: nginxbridge
+#    external: true
 
 volumes:
   prefixphp:

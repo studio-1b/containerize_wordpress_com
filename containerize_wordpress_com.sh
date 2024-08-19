@@ -602,7 +602,8 @@ echo "Using $CONTAINER_PREFIX as container name"
 USED_LOCAL_PORTS=$(docker ps --format '{{.Ports}}' | grep -o  :[0-9]*-)
 NEW_PORT=8888
 echo $USED_LOCAL_PORTS | grep ":${NEW_PORT}-" &>/dev/null
-while [ $? -ne 0 ];do
+while [ $? -eq 0 ];do
+  echo "$NEW_PORT : is unavailable on this host"
   NEW_PORT=$(( NEW_PORT + 1 ))
   echo $USED_LOCAL_PORTS | grep ":${NEW_PORT}-" &>/dev/null
 done
@@ -633,7 +634,7 @@ if [ "$DELAY" != "y" ]; then
   echo "aborted!"
   exit 4
 fi
-sed -i "s/prefix/$CONTAINER_PREFIX/g" docker-compose.yaml
+sed -i "s/prefix/$CONTAINER_PREFIX/g;s/HOST_PORT/$NEW_PORT/g" docker-compose.yaml
 echo "changes made to docker-compose.yaml"
 
 #docker-compose -d up
@@ -663,7 +664,7 @@ sleep 30
 AGAIN="y"
 while [ "$AGAIN" == "y" ]; do
   AGAIN="N"
-  curl -v http://localhost:8889 &> wordpress.html
+  curl -v http://localhost:$NEW_PORT &> wordpress.html
   if [ $? -ne 0 ]; then
       echo "no response from wordpress container.  Is it up?  Exiting rest of set up, now."
       #exit 1
@@ -706,7 +707,7 @@ if [ $? -ne 0 ]; then
     echo "stopping here, bc install doesnt know if it needs to replace files"
     exit 2
 fi
-grep "Location: http://localhost:8889/wp-admin/install.php" wordpress.html
+grep "Location: http://localhost:$NEW_PORT/wp-admin/install.php" wordpress.html
 if [ $? -ne 0 ]; then
     echo "not expected result"
     echo "expected a redirect to install page"
