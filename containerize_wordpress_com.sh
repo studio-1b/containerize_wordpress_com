@@ -750,7 +750,7 @@ docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chgrp www-data [0-9][0
 #docker cp  wp-config.php $CONTAINER_NAME:/var/www/html/wp-config.php
 
 # run import of export file
-LOCAL_WP_URL="$(hostname):NEW_PORT"
+LOCAL_WP_URL="$(hostname):$NEW_PORT"
 NEW_WP_ADMIN="admin"
 if [ -f $NEW_WP_ADMIN ]; then
   NEW_WP_PASSWORD=$(<$NEW_WP_ADMIN)
