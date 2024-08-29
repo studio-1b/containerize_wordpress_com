@@ -550,7 +550,7 @@ if [ "$IS_WXL_AND_TAR_EXISTS" != "Y" ]; then
   #Content-Disposition: attachment; filename="media-export-10-from-0-to-14056.tar"
   if [ $? -ne 0 ]; then
     echo "unable to download media export. to continue existing download, run:"
-    echo "curl -v -C - -H \"$AUTH_HEADER\" --cookie \"$API_COOKIE\"   "$MEDIA_URL" -o $TAR_FILE"
+    echo "curl -v -C - -H \"$AUTH_HEADER\" --cookie \"$API_COOKIE\"   \"$MEDIA_URL\" -o $TAR_FILE"
     exit 12
   fi
 
