@@ -764,7 +764,7 @@ docker exec -w /var/www/html/ $CONTAINER_NAME  wp core install --allow-root --ur
 docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install wordpress-importer --activate --allow-root
 docker exec -w /var/www/html/ $CONTAINER_NAME  wp import /tmp/$WXL_FILE --authors=create --allow-root
 docker exec -w /var/www/html/ $CONTAINER_NAME  rm /tmp/$WXL_FILE
-#ocker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen --activate
+docker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen --activate --allow-root
 #ocker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install Revelar --activate
 
 # Install googlemap embed shortcode from a local zip file
