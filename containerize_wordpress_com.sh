@@ -509,7 +509,7 @@ if [ "$IS_WXL_AND_TAR_EXISTS" != "Y" ]; then
         echo "is file"
         echo "${s: -4} .xml"
         if [ "${s: -4}" == ".xml" ]; then
-          mv -v $s .
+          mv -v $s ./${WXL_FILE}
         fi
       fi
     done
