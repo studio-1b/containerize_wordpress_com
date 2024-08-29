@@ -2,24 +2,24 @@ version: '3.1'
 
 services:
 
-  prefixphp:
+  prefix_php:
     image: wordpress:latest
     ports:
       - HOST_PORT:80
     environment:
-      WORDPRESS_DB_HOST: prefixmysql
+      WORDPRESS_DB_HOST: prefix_mysql
       WORDPRESS_DB_USER: wp_prefix
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wp_prefix
     volumes:
-      - prefixphp:/var/www/html
+      - prefix_php:/var/www/html
     restart: unless-stopped
     networks:
       bridge:
         aliases:
-          - prefixphp
+          - prefix_php
 
-  prefixmysql:
+  prefix_mysql:
     image: mysql:latest
     environment:
       MYSQL_DATABASE: wp_prefix
@@ -27,12 +27,12 @@ services:
       MYSQL_PASSWORD: wordpress
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
-      - prefixmysql:/var/lib/mysql
+      - prefix_mysql:/var/lib/mysql
     restart: unless-stopped
     networks:
       bridge:
         aliases:
-          - prefixmysql
+          - prefix_mysql
 
 networks:
   bridge:
@@ -40,5 +40,5 @@ networks:
 #    external: true
 
 volumes:
-  prefixphp:
-  prefixmysql:
+  prefix_php:
+  prefix_mysql:

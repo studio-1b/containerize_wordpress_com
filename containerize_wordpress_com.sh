@@ -598,6 +598,7 @@ if [ "$WP_URL" != "" ]; then
 else
   CONTAINER_PREFIX="$(echo $FILENAME|tr '.' '-')"
 fi
+CONTAINER_PREFIX="${CONTAINER_PREFIX:0:25}"
 echo "Using $CONTAINER_PREFIX as container name"
 USED_LOCAL_PORTS=$(docker ps --format '{{.Ports}}' | grep -o  :[0-9]*-)
 NEW_PORT=8888
@@ -626,15 +627,15 @@ fi
 if [ ! -f docker-compose.yaml.original ]; then
   cp docker-compose.yaml docker-compose.yaml.original
 fi
-echo "s/prefix/$CONTAINER_PREFIX/g;s/HOST_PORT/$NEW_PORT/g"
-sed "s/prefix/$CONTAINER_PREFIX/g;s/HOST_PORT/$NEW_PORT/g" docker-compose.yaml
+echo "s/prefix/${CONTAINER_PREFIX}/g;s/HOST_PORT/$NEW_PORT/g"
+sed "s/prefix/${CONTAINER_PREFIX}/g;s/HOST_PORT/$NEW_PORT/g" docker-compose.yaml
 echo "Does this look right? (y/n)"
 read DELAY
 if [ "$DELAY" != "y" ]; then
   echo "aborted!"
   exit 4
 fi
-sed -i "s/prefix/$CONTAINER_PREFIX/g;s/HOST_PORT/$NEW_PORT/g" docker-compose.yaml
+sed -i "s/prefix/${CONTAINER_PREFIX}/g;s/HOST_PORT/$NEW_PORT/g" docker-compose.yaml
 echo "changes made to docker-compose.yaml"
 
 #docker-compose -d up
@@ -644,14 +645,14 @@ docker pull mysql:latest
 docker-compose up -d
 
 WORK=$(pwd)
-CONTAINER_NAME="$(basename $WORK)_${CONTAINER_PREFIX}php_1"
+CONTAINER_NAME="$(basename $WORK)_${CONTAINER_PREFIX}_php_1"
 docker ps -f name=$CONTAINER_NAME | grep "$CONTAINER_NAME"
 if [ $? -ne 0 ]; then
   echo "This script won't work"
   echo "It is expecting the new container for wordpress to be named: $CONTAINER_NAME"
   exit 1
 fi
-SQLCONTAINER_NAME="$(basename $WORK)_${CONTAINER_PREFIX}mysql_1"
+SQLCONTAINER_NAME="$(basename $WORK)_${CONTAINER_PREFIX}_mysql_1"
 docker ps -f name=$SQLCONTAINER_NAME | grep "$SQLCONTAINER_NAME"
 if [ $? -ne 0 ]; then
   echo "This script won't work"
