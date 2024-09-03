@@ -770,7 +770,7 @@ docker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen -
 # Install googlemap embed shortcode from a local zip file
 #$ wp plugin install ../my-plugin.zip
 docker cp  bob-shortcode-plugin.zip   $CONTAINER_NAME:/tmp/
-docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install /tmp/bob-shortcode-plugin.zip --activate
+docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install /tmp/bob-shortcode-plugin.zip --activate --allow-root
 
 
 # update the URL, to match docker-compose's port forwarding
