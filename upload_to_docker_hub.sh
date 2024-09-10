@@ -1,5 +1,12 @@
 #/bin/bash
 
+echo "Not Implemented.  This does not work right now!"
+echo "Need to find a way to populate the volumes in both containers.  "
+echo "They both default creating a unnamed volume, if you don't specify a location.  "
+echo "So changes in the volumized directories, are ever saved in the container, and therefore any committed images"
+
+exit 10
+
 if [ "$1" == "" ]; then
   echo "USAGE: upload_to_docker_hub.sh [username] [wp_php_tag] [wp_mysql_tag]"
   exit 1
