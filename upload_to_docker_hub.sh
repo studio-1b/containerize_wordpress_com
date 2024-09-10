@@ -15,23 +15,69 @@ fi
 echo $1 | grep ':' &>/dev/null
 if [ $? -eq 0 ]; then
   #https://stackoverflow.com/questions/55277250/what-are-the-appropriate-names-for-the-parts-of-a-docker-images-name#:~:text=According%20to%20the%20reference%20for,my%2Dregistry%20is%20the%20registry
+  echo "Found ':' in parameters"
   echo "Please only enter image name for PHP argument, not with tag suffix: $1"
   echo "Example:"
   echo "my-registry/my-image:0.1.0"
   echo "my-registry is the registry"
   echo "my-registry/my-image is the (image) name"
   echo "0.1.0 is the tag (name)"
+  echo "[NO ] my-registry/my-image:0.1.0"
+  echo "[NO ] my-registry is the registry"
+  echo "[NO ] my-registry/my-image is the (image) name"
+  echo "[NO ] 0.1.0 is the tag (name)"
+  echo "[YES] my-image"
   exit 1
 fi
 echo $2 | grep ':' &>/dev/null
 if [ $? -eq 0 ]; then
   #https://stackoverflow.com/questions/55277250/what-are-the-appropriate-names-for-the-parts-of-a-docker-images-name#:~:text=According%20to%20the%20reference%20for,my%2Dregistry%20is%20the%20registry
+  echo "Found ':' in parameters"
   echo "Please only enter image name for MYSQL argument, not with tag suffix: $2"
   echo "Example:"
   echo "my-registry/my-image:0.1.0"
   echo "my-registry is the registry"
   echo "my-registry/my-image is the (image) name"
   echo "0.1.0 is the tag (name)"
+  echo "[NO ] my-registry/my-image:0.1.0"
+  echo "[NO ] my-registry is the registry"
+  echo "[NO ] my-registry/my-image is the (image) name"
+  echo "[NO ] 0.1.0 is the tag (name)"
+  echo "[YES] my-image"
+  exit 1
+fi
+echo $1 | grep '/' &>/dev/null
+if [ $? -eq 0 ]; then
+  #https://stackoverflow.com/questions/55277250/what-are-the-appropriate-names-for-the-parts-of-a-docker-images-name#:~:text=According%20to%20the%20reference%20for,my%2Dregistry%20is%20the%20registry
+  echo "Found '/' in parameters"
+  echo "Please only enter image name for PHP argument, not with tag suffix: $1"
+  echo "Example:"
+  echo "my-registry/my-image:0.1.0"
+  echo "my-registry is the registry"
+  echo "my-registry/my-image is the (image) name"
+  echo "0.1.0 is the tag (name)"
+  echo "[NO ] my-registry/my-image:0.1.0"
+  echo "[NO ] my-registry is the registry"
+  echo "[NO ] my-registry/my-image is the (image) name"
+  echo "[NO ] 0.1.0 is the tag (name)"
+  echo "[YES] my-image"
+  exit 1
+fi
+echo $2 | grep '/' &>/dev/null
+if [ $? -eq 0 ]; then
+  #https://stackoverflow.com/questions/55277250/what-are-the-appropriate-names-for-the-parts-of-a-docker-images-name#:~:text=According%20to%20the%20reference%20for,my%2Dregistry%20is%20the%20registry
+  echo "Found '/' in parameters"
+  echo "Please only enter image name for MYSQL argument, not with tag suffix: $2"
+  echo "Example:"
+  echo "my-registry/my-image:0.1.0"
+  echo "my-registry is the registry"
+  echo "my-registry/my-image is the (image) name"
+  echo "0.1.0 is the tag (name)"
+  echo "[NO ] my-registry/my-image:0.1.0"
+  echo "[NO ] my-registry is the registry"
+  echo "[NO ] my-registry/my-image is the (image) name"
+  echo "[NO ] 0.1.0 is the tag (name)"
+  echo "[YES] my-image"
   exit 1
 fi
 
