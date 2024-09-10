@@ -48,7 +48,7 @@ else
   echo "Found file: $WXL_FILE"
   echo "Both required files found, skipping URL"
   IS_WXL_AND_TAR_EXISTS="Y"
-  WP_URL=""
+  WP_URL="$FILENAME"
 fi
 
 
@@ -577,20 +577,6 @@ fi
 
 
 
-# Verifying files are valid
-echo "Examining export file $WXL_FILE"
-grep '<wp:author_login>[^<]' $WXL_FILE 
-if [ $? -eq 0 ]; then
-  echo "found inconsistency.  Copying original to $WXL_FILE.original, then fixing"
-  cp $WXL_FILE $WXL_FILE.original
-  sed -i 's/<wp:author_login>/<wp:author_login><![CDATA[/g;s|</wp:author_login>|]]></wp:author_login>|g;s/<wp:author_email>/<wp:author_email><![CDATA[/g;s|</wp:author_email>|]]></wp:author_email>|g' $WXL_FILE
-  echo "new changes in $WXL_FILE"
-fi
-
-
-
-
-
 
 # Prepaing wordpress config and containers
 if [ "$WP_URL" != "" ]; then
@@ -611,6 +597,41 @@ done
 echo "Using $NEW_PORT as new local port for container"
 echo "We use first unused port by docker after 8888"
 echo "And hope it isn't used by other processes"
+
+
+
+
+
+
+# Verifying files are valid
+echo "Examining export file $WXL_FILE"
+grep '<wp:author_login>[^<]' $WXL_FILE 
+if [ $? -eq 0 ]; then
+  echo "found inconsistency.  Copying original to $WXL_FILE.original, then fixing"
+  cp $WXL_FILE $WXL_FILE.original
+  sed -i 's/<wp:author_login>/<wp:author_login><![CDATA[/g;s|</wp:author_login>|]]></wp:author_login>|g;s/<wp:author_email>/<wp:author_email><![CDATA[/g;s|</wp:author_email>|]]></wp:author_email>|g' $WXL_FILE
+  echo "new changes in $WXL_FILE"
+fi
+OLD_LINK="$WP_URL"
+#if [ "${WP_URL:0:8}" == "https://" ]; then
+if [ "${OLD_LINK:0:8}" != "https://" ]; then
+  OLD_LINK="https://$WP_URL/"
+fi
+grep "$OLD_LINK" $WXL_FILE &>/dev/null
+if [ $? -eq 0 ]; then
+  if [ ! -f $WXL_FILE.original ]; then
+    cp $WXL_FILE $WXL_FILE.original
+  fi
+  NEW_LINK="http://$(hostname):$NEW_PORT/"
+  echo "$OLD_LINK|$NEW_LINK"
+  sed -i "s|$OLD_LINK|$NEW_LINK|g" $WXL_FILE
+  echo "link changes in $WXL_FILE"
+fi
+
+
+
+
+
 
 grep prefix docker-compose.yaml
 if [ $? -ne 0 ]; then
@@ -731,24 +752,6 @@ docker exec $CONTAINER_NAME  mv /tmp/wp-cli.phar /usr/local/bin/wp
 docker cp  $WXL_FILE   $CONTAINER_NAME:/tmp
 docker cp  $TAR_FILE   $CONTAINER_NAME:/tmp
 
-# replace PHP for wordpress
-# https://www.wpbeginner.com/beginners-guide/which-wordpress-files-should-you-backup-and-the-right-way-to-do-it/
-# wp-config.php
-# .htaccess
-# wp-content/*
-#docker cp  $CONTAINER_NAME:/var/www/html/wp-config.php .
-#docker exec $CONTAINER_NAME  rm -R /var/www/html/*
-#docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  tar xvzf /tmp/$TAR_FILE
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  tar xvf /tmp/$TAR_FILE
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  rm /tmp/$TAR_FILE
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chown www-data upgrade
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chgrp www-data upgrade
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chown www-data [0-9][0-9][0-9][0-9]
-docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chgrp www-data [0-9][0-9][0-9][0-9]
-#docker exec $CONTAINER_NAME  cp -R blog/.htaccess .
-#docker exec $CONTAINER_NAME  cp -R blog/wp-config.php .
-#docker exec $CONTAINER_NAME  cp -R blog/wp-content/ .
-#docker cp  wp-config.php $CONTAINER_NAME:/var/www/html/wp-config.php
 
 # run import of export file
 LOCAL_WP_URL="$(hostname):$NEW_PORT"
@@ -771,6 +774,29 @@ docker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen -
 #$ wp plugin install ../my-plugin.zip
 docker cp  bob-shortcode-plugin.zip   $CONTAINER_NAME:/tmp/
 docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install /tmp/bob-shortcode-plugin.zip --activate --allow-root
+
+
+# replace PHP for wordpress
+# https://www.wpbeginner.com/beginners-guide/which-wordpress-files-should-you-backup-and-the-right-way-to-do-it/
+# wp-config.php
+# .htaccess
+# wp-content/*
+#docker cp  $CONTAINER_NAME:/var/www/html/wp-config.php .
+#docker exec $CONTAINER_NAME  rm -R /var/www/html/*
+#docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  tar xvzf /tmp/$TAR_FILE
+docker exec -w /var/www/html/wp-content/uploads/ $CONTAINER_NAME  tar xvf /tmp/$TAR_FILE
+docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  rm /tmp/$TAR_FILE
+docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chown www-data upgrade
+docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chgrp www-data upgrade
+docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chown -R www-data uploads
+docker exec -w /var/www/html/wp-content/ $CONTAINER_NAME  chgrp -R www-data uploads
+docker exec -w /var/www/html/wp-content/uploads/ $CONTAINER_NAME  chown www-data [0-9][0-9][0-9][0-9]
+docker exec -w /var/www/html/wp-content/uploads/ $CONTAINER_NAME  chgrp www-data [0-9][0-9][0-9][0-9]
+#docker exec $CONTAINER_NAME  cp -R blog/.htaccess .
+#docker exec $CONTAINER_NAME  cp -R blog/wp-config.php .
+#docker exec $CONTAINER_NAME  cp -R blog/wp-content/ .
+#docker cp  wp-config.php $CONTAINER_NAME:/var/www/html/wp-config.php
+
 
 
 # update the URL, to match docker-compose's port forwarding
