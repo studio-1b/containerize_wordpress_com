@@ -1,5 +1,13 @@
 #/bin/bash
 
+
+echo "Not Implemented.  This does not work right now!"
+echo "Need to find a way to populate the volumes in both containers.  "
+echo "They both default creating a unnamed volume, if you don't specify a location.  "
+echo "So changes in the volumized directories, are ever saved in the container, and therefore any committed images"
+
+exit 10
+
 if [ "$1" == "" ]; then
   echo "USAGE: upload_to_aws_ecr [wordpress_php_aws_ecr_rep_url] [wordpress_mysql_aws_ecr_rep_url]"
   exit 1
