@@ -65,3 +65,74 @@ It should
 
 ## Caveats
 This is untested code, as of 7/30/24.  The individual commands are correct, but I haven't tested it for bugs, and error handling.  Please use at your own risk.
+
+# uploading data
+
+I have included 2 script I plan to use to upload data that I want to distribute in the wordpress images.  The wordpress images store data in docker volumes, so they are not part of the image.  So a hack-y solution was made to save the wordpress uploads data and mysql volume data, in a 3rd volume.  When started, this 3rd container (car2graphy/volume_7z_alpine) will search in it's /mnt/vol* for nonempty volumes, and compress them within it's own image.  These scripts will create this backup container, zip the volume data, and upload it to your docker repo.
+
+to Docker hub
+```
+upload_to_docker_hub.sh [username] [image name in dockerhub]
+```
+
+to AWS ECR:
+```
+upload_to_aws_ecr.sh [username] [repo name in AWS ECR]
+```
+
+To distribute the data, in new Wordpress containers, change the modified docker-compose.yaml when you containerized you wordpress, and make it look like below (foodbowl_wp_backup is name of your data repo, above).  It will pull empty wordpress and msql containers, and populate their empty volumes with the backup data.  Notice the volume names are the same in backup container.
+
+$ cat ../docker-compose.yaml 
+```
+version: '3.1'
+services:
+  foodbowl_wp_backup:
+    image: car2graphy/foodbowl_wp_backup:latest
+    volumes:
+      - foodbowl_wp_php:/mnt/vol1
+      - foodbowl_wp_mysql:/mnt/vol2
+    networks:
+      bridge:
+        aliases:
+          - whenthefoodbowlattacks_alpine_bak
+  foodbowl-wp-php:
+    image: wordpress:latest
+    depends_on:
+      - foodbowl_wp_backup
+    ports:
+      - 8888:80
+    environment:
+      WORDPRESS_DB_HOST: whenthefoodbowlattacks-wo_mysql
+      WORDPRESS_DB_USER: wp_whenthefoodbowlattacks-wo
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wp_whenthefoodbowlattacks-wo
+    volumes:
+      - foodbowl_wp_php:/var/www/html
+    restart: unless-stopped
+    networks:
+      bridge:
+        aliases:
+          - whenthefoodbowlattacks-wo_php
+  foodbowl-wp-mysql:
+    image: mysql:latest
+    depends_on:
+      - foodbowl_wp_backup
+    volumes:
+      - foodbowl_wp_mysql:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      bridge:
+        aliases:
+          - whenthefoodbowlattacks-wo_mysql
+volumes:
+  foodbowl_wp_php:
+  foodbowl_wp_mysql:
+networks:
+  bridge:
+```
+
+to start the containers, with your data, run:
+```
+docker-compose up
+```
+
