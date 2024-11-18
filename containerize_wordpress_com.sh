@@ -764,19 +764,7 @@ else
 fi
 docker exec -w /var/www/html/ $CONTAINER_NAME  wp core install --allow-root --url=$LOCAL_WP_URL --title=Test.$WP_URL  --admin_user=$NEW_WP_ADMIN --admin_password=$NEW_WP_PASSWORD --admin_email=$NEW_WP_ADMIN@localhost.localdomain
 
-docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install wordpress-importer --activate --allow-root
-docker exec -w /var/www/html/ $CONTAINER_NAME  wp import /tmp/$WXL_FILE --authors=create --allow-root
-docker exec -w /var/www/html/ $CONTAINER_NAME  rm /tmp/$WXL_FILE
-docker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen --activate --allow-root
-#ocker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install Revelar --activate
-
-# Install googlemap embed shortcode from a local zip file
-#$ wp plugin install ../my-plugin.zip
-docker cp  bob-shortcode-plugin.zip   $CONTAINER_NAME:/tmp/
-docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install /tmp/bob-shortcode-plugin.zip --activate --allow-root
-
-
-# replace PHP for wordpress
+# replace PHP for wordpress, and unTAR wp-content
 # https://www.wpbeginner.com/beginners-guide/which-wordpress-files-should-you-backup-and-the-right-way-to-do-it/
 # wp-config.php
 # .htaccess
@@ -797,6 +785,17 @@ docker exec -w /var/www/html/wp-content/uploads/ $CONTAINER_NAME  chgrp www-data
 #docker exec $CONTAINER_NAME  cp -R blog/wp-content/ .
 #docker cp  wp-config.php $CONTAINER_NAME:/var/www/html/wp-config.php
 
+# WXL import
+docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install wordpress-importer --activate --allow-root
+docker exec -w /var/www/html/ $CONTAINER_NAME  wp import /tmp/$WXL_FILE --authors=create --allow-root
+docker exec -w /var/www/html/ $CONTAINER_NAME  rm /tmp/$WXL_FILE
+docker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install twentysixteen --activate --allow-root
+#ocker exec -w /var/www/html/ $CONTAINER_NAME   wp theme install Revelar --activate
+
+# Install googlemap embed shortcode from a local zip file
+#$ wp plugin install ../my-plugin.zip
+docker cp  bob-shortcode-plugin.zip   $CONTAINER_NAME:/tmp/
+docker exec -w /var/www/html/ $CONTAINER_NAME  wp plugin install /tmp/bob-shortcode-plugin.zip --activate --allow-root
 
 
 # update the URL, to match docker-compose's port forwarding
